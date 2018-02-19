@@ -11,21 +11,17 @@ const pokemon = (state = {}, action) => {
     case 'FETCH_POKEMON_SUCCESS':
       return {
         ...state,
-        pokemon: action.data,
+        ...action.data,
         isLoading: false,
         isLoaded: true
-      }
-    case 'FETCH_POKEMON_FAILURE':
-      return {
-
       }
     default:
       return state
   }
 }
- 
-const pokeApp = combineReducers({
-  pokemon
-})
+
+export const getPokemon = state => state.pokemon
+
+const pokeApp = combineReducers({ pokemon })
  
 export default pokeApp

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
-import { fetchPokemon } from './actions';
+import { fetchPokemon, fetchAPokemon } from './actions';
 import { getPokemon } from './reducers';
 
 class App extends Component {
@@ -12,7 +12,7 @@ class App extends Component {
   }
 
   render() {
-    const { pokemon } = this.props
+    const { pokemon, dispatch } = this.props
     console.log(pokemon)
     return (
       <div className="App">
@@ -22,7 +22,7 @@ class App extends Component {
         </header>
         <p className="App-intro">
           {pokemon.results && pokemon.results.map((pokemon) => {
-            return <h1>{pokemon.name}</h1>
+            return <h3 onClick={() => dispatch(fetchAPokemon(pokemon.url, pokemon.name))}>{pokemon.name}</h3>
           })}
         </p>
       </div>

@@ -15,6 +15,11 @@ const pokemon = (state = {}, action) => {
         isLoading: false,
         isLoaded: true
       }
+    case 'CATCH_POKEMON_SUCCESS':
+      return {
+        ...state,
+        [action.name]: action.data
+      }
     default:
       return state
   }

@@ -1,14 +1,10 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
-import {
-  fetchPokemon,
-  fetchAPokemon,
-  hidePokeStats,
-  showPokeStats
-} from './actions';
 import { getPokemon, getShouldShowPokeStats } from './reducers';
+import Pokemon from './pokemon';
+import { fetchPokemon } from './actions';
 
 class App extends Component {
 
@@ -26,28 +22,13 @@ class App extends Component {
         </header>
         <div className="App-intro">
           {pokemons.results && pokemons.results.map((pokemon) => {
-            const { name, url } = pokemon
-            return <Fragment key={name}>
-              <h3 onClick={() => {
-                if (!pokemons[name]) {
-                  return dispatch(fetchAPokemon(url, name))
-                } else if (!shouldShowPokeStats[name] && pokemons[name]) {
-                  return dispatch(showPokeStats(name))
-                } else {
-                  return dispatch(hidePokeStats(name))
-                }
-              }
-              }>
-                {name}
-              </h3>
-              {shouldShowPokeStats && shouldShowPokeStats[name] &&
-                <div>
-                  <img src={pokemons[name].sprites.front_default} alt='pokemons'/>
-                  <h5>{pokemons[name].weight}</h5>
-                  <h5>{pokemons[name].height}</h5>
-                </div>
-              }
-          </Fragment>
+            return <Pokemon
+               key={pokemon.name}
+               dispatch={dispatch}
+               shouldShowPokeStats={shouldShowPokeStats}
+               pokemons={pokemons}
+               pokemon={pokemon}
+            />
           })}
         </div>
       </div>

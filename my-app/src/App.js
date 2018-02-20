@@ -2,7 +2,12 @@ import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
-import { fetchPokemon, fetchAPokemon } from './actions';
+import {
+  fetchPokemon,
+  fetchAPokemon,
+  hidePokeStats,
+  showPokeStats
+} from './actions';
 import { getPokemon, getShouldShowPokeStats } from './reducers';
 
 class App extends Component {
@@ -22,9 +27,17 @@ class App extends Component {
         <div className="App-intro">
           {pokemons.results && pokemons.results.map((pokemon) => {
             const { name, url } = pokemon
-            console.log(name)
             return <Fragment key={name}>
-              <h3 onClick={() => dispatch(fetchAPokemon(url, name))}>
+              <h3 onClick={() => {
+                if (!shouldShowPokeStats && !shouldShowPokeStats[name] && !pokemons[name]) {
+                  return dispatch(fetchAPokemon(url, name))
+                } else if (!shouldShowPokeStats[name] && pokemons[name]) {
+                  return dispatch(showPokeStats(name))
+                } else {
+                  return dispatch(hidePokeStats(name))
+                }
+              }
+              }>
                 {name}
               </h3>
               {shouldShowPokeStats && shouldShowPokeStats[name] &&

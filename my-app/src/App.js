@@ -29,7 +29,7 @@ class App extends Component {
             const { name, url } = pokemon
             return <Fragment key={name}>
               <h3 onClick={() => {
-                if (!shouldShowPokeStats && !shouldShowPokeStats[name] && !pokemons[name]) {
+                if (!pokemons[name]) {
                   return dispatch(fetchAPokemon(url, name))
                 } else if (!shouldShowPokeStats[name] && pokemons[name]) {
                   return dispatch(showPokeStats(name))

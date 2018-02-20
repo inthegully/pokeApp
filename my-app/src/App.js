@@ -1,9 +1,9 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import logo from './logo.svg';
 import './App.css';
 import { connect } from 'react-redux';
 import { fetchPokemon, fetchAPokemon } from './actions';
-import { getPokemon } from './reducers';
+import { getPokemon, getShouldShowPokeStats } from './reducers';
 
 class App extends Component {
 
@@ -12,26 +12,39 @@ class App extends Component {
   }
 
   render() {
-    const { pokemon, dispatch } = this.props
-    console.log(pokemon)
+    const { pokemons, dispatch, shouldShowPokeStats } = this.props
     return (
       <div className="App">
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <h1 className="App-title">Welcome to Pokemon</h1>
         </header>
-        <p className="App-intro">
-          {pokemon.results && pokemon.results.map((pokemon) => {
-            return <h3 onClick={() => dispatch(fetchAPokemon(pokemon.url, pokemon.name))}>{pokemon.name}</h3>
+        <div className="App-intro">
+          {pokemons.results && pokemons.results.map((pokemon) => {
+            const { name, url } = pokemon
+            console.log(name)
+            return <Fragment key={name}>
+              <h3 onClick={() => dispatch(fetchAPokemon(url, name))}>
+                {name}
+              </h3>
+              {shouldShowPokeStats && shouldShowPokeStats[name] &&
+                <div>
+                  <img src={pokemons[name].sprites.front_default} alt='pokemons'/>
+                  <h5>{pokemons[name].weight}</h5>
+                  <h5>{pokemons[name].height}</h5>
+                </div>
+              }
+          </Fragment>
           })}
-        </p>
+        </div>
       </div>
     );
   }
 }
 const mapStateToProps = (state) => {
   return {
-    pokemon: getPokemon(state)
+    pokemons: getPokemon(state),
+    shouldShowPokeStats: getShouldShowPokeStats(state)
   }
 }
 export default connect(mapStateToProps)(App);
